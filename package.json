@@ -1,14 +1,15 @@
 {
-  "name": "${PROJECT_NAME}",
+  "name": "shogi_engine_wasm_web_console",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
   "scripts": {
-    "build": "tsc"
+    "server": "npx serve"
   },
-  "dependencies": {},
   "devDependencies": {
-    "typescript": "^5.5.3"
+    "serve": "^14.2.5"
   },
-  "private": true
+  "private": true,
+  "dependencies": {
+
+  }
 }

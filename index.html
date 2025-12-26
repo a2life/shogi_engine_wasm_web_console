@@ -1,10 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8" />
+    <title>YaneuraOu WASM NNUE Console</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        #log { white-space: pre-wrap; background: #eee; padding: 10px; height: 300px; overflow-y: auto; }
+        #input { width: 100%; padding: 10px; font-size: 16px; }
+    </style>
 </head>
+
 <body>
-$END$
+<h1>YaneuraOu Engine Console, using WASM module</h1>
+
+<div id="log"></div>
+<input id="input" placeholder="Type USI commands here (e.g., 'usi')" />
+
+<!-- Load Emscripten-generated loader -->
+
+<script src="/lib/yaneuraou.halfkp.noeval.js"></script>
+
+
+<!-- Load your browser-side engine controller -->
+<script type="module" src="/index.js"></script>
+<!-- Command history logic (new external file) -->
+<script src="/command_history.js"></script>
 </body>
 </html>
