@@ -30,8 +30,8 @@ docker run --rm -v %CD%:/src emscripten/emsdk:3.1.43 node script/wasm_build.js h
  
 </code></pre>
 
-### The WASN package includes javascript file that you can execute with node.js 
-In another word, included top level (usi.halfkp.noeval.js/ts) js file is meant for running the code locally in your PC. 
+### The WASM package includes javascript file that you can execute with node.js 
+In another word, included top level (usi.halfkp.noeval.js/ts) js file is meant for running the code locally on your PC. 
 But why bother with this as you will get native binary for your machine anyway.
 
 The code in this repo will allow you to host this WASM files on a server so that remote browser will load them and run it inside the browser.
@@ -48,24 +48,17 @@ Just place files as below
 
 For testing it out, run npx serve.  The web site can be viewed at localhost:3000
 
-Note two additional http headers in serve.json.  If served from NGINX or Apache server, you need to set these headers. 
+Note two additional http headers in serve.json. This is needed so that browser will prepare SharedArrayBuffer object.   Therefore, if served from NGINX or Apache server, the server need to set these headers. 
 
-Concept recap (why these headers matter)
+#### Why these headers matter.
 To use SharedArrayBuffer on the open web, the page must be cross‑origin isolated, which means:
-
 - Cross-Origin-Opener-Policy: same-origin
-
 - Cross-Origin-Embedder-Policy: require-corp or credentialless
 
-Once those are sent on your HTML + worker responses, SAB and high‑precision timers are unlocked in modern browsers.
-
-You also want:
-
-Correct Content-Type: application/wasm for .wasm
-
-Compression (prefer .br, fallback .gz) for .wasm, nn.bin, book.db, etc.
-
-Cross-Origin-Resource-Policy / CORS sane where needed.
+#### Also:
+- Correct Content-Type: application/wasm for .wasm
+- Compression (prefer .br, fallback .gz) for .wasm, nn.bin, book.db, etc.
+- Cross-Origin-Resource-Policy / CORS sane where needed.
 
 
 
