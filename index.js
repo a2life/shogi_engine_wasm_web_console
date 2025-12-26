@@ -48,7 +48,7 @@ async function loadBook(Module, url) {
         log(line);
     })
 
-    await loadNNUE(Module, "/nn/nn.bin");
+    await loadNNUE(Module, "/eval/nn.bin");
 
     await loadBook(Module, "/book/standard_book.db");
 
