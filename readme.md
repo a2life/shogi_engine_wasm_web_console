@@ -1,7 +1,7 @@
 ### Simple WASM Yaneuraou engine console.
 
 This HTML console uses WebAssembly version of Yaneuraou.  
-Its a simple proof of concept mock program to exercise the USI communication protocol of Yaneuraou Shogi engine on browser and ensure its functionality with HTML and JavaScript.
+Its a simple proof of concept mock program to exercise the USI communication protocol of Yaneuraou Shogi engine on browser running as WebAssembly(WASM) and ensure its functionality with HTML and JavaScript.
 
 Operation of this source code was confirmed with halfkp.noeval version of YaneuraOu engine (various version 8.* and 7.6.3) with 
 separately prepared Suisho5 Evaluation function binary as nn.bin,  and
