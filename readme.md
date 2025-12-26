@@ -8,14 +8,15 @@ separately prepared Suisho5 Evaluation function binary as nn.bin,  and
 yaneuraou Standard book(2017) as standard_book.db 
 
 
-### WASM executable is not included in YaneuraOu release packages.  Version 7.6.3 version is available from Mizar/Yaneuraou repo.
+### WASM executable is not included in YaneuraOu release packages.  The WASM package for Version 7.6.3 is available from Mizar/Yaneuraou repo.
 https://github.com/mizar/YaneuraOu/releases/tag/v7.6.3  
 
-### In theory, you should be able to compile from the source https://github.com/yaneurao/YaneuraOu with the following setup.
-#### Note that WASM component for Version 9.x '_usi_command' export is currently turned off and not functional,so the compilation will fail.
+### For later versions, you should be able to compile from the source https://github.com/yaneurao/YaneuraOu with the following setup.
+#### As of December 2025, the WASM component for Version 9.x '_usi_command' export is turned off and not functional yet,so the compilation will fail.  The version 8.6 seems to compile everything. version 8.7 will not compile uuen embeded versions but noeval version will compile fine.
 
 - Clone the source 
 - Docker installed in your PC
+- At this time (as of December 2025), checkout V8.6.
 - just run .\script\build-wasm.cmd
 - to limit the compile target to halfkp.noeval, add 'halfkp.noeval' parameter in the last line of build-wasm.cmd. i.e.,
 <pre><code>
