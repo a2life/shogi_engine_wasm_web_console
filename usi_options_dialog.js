@@ -83,23 +83,36 @@ window.USIOptionsDialog = (() => {
 
     function applyChanges(form) {
         const inputs = form.querySelectorAll("[data-option-name]");
+        const opts = USIOptions.getOptions();
 
         inputs.forEach(input => {
             const name = input.dataset.optionName;
-            let value;
+            const opt = opts.find(o => o.name === name);
+            if (!opt) return;
 
+            let newValue;
             if (input.type === "checkbox") {
-                value = input.checked ? "true" : "false";
+                newValue = input.checked ? "true" : "false";
             } else {
-                value = input.value;
+                newValue = input.value.trim();
             }
 
-            USIOptions.applySetOption(`setoption name ${name} value ${value}`);
-            window.Yaneura.postMessage(`setoption name ${name} value ${value}`);
+            // Only send if changed from current value
+            if (newValue !== opt.value) {
+                // Update USIOptions internal state
+                USIOptions.applySetOption(`setoption name ${name} value ${newValue}`);
+
+                // Send to engine
+                if (window.onUSIOptionChanged) {
+                    window.onUSIOptionChanged(name, newValue);
+                }
+
+            }
         });
 
         document.getElementById("usi-options-dialog").style.display = "none";
     }
+
 
     return {
         open: createDialog
