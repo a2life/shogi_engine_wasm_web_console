@@ -57,7 +57,7 @@ async function loadBook(Module, url) {
                 suppressUsiOutput = false;  //stop hiding after init.
             }
             return
-        };
+        }
         log(line);
     })
 
