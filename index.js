@@ -46,6 +46,7 @@ async function loadBook(Module, url) {
     //capture the messages from the engine to debug console and feed to log
     Module.addMessageListener((line) => {
         log(line);
+        USIOptions.feedEngineLine(line);
     })
 
     await loadNNUE(Module, "/eval/nn.bin");
@@ -58,10 +59,17 @@ async function loadBook(Module, url) {
     input.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
             const cmd = input.value.trim();
+            if (cmd.startsWith("setoption")){
+              USIOptions.applySetOption(cmd);
+            }
             input.value = "";
             log("> " + cmd);
             Module.postMessage(cmd);
         }
     });
+
+
+
+
     window.Yaneura = Module;
 })();

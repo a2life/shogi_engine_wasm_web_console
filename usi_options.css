@@ -1,0 +1,48 @@
+/* usi_options.css */
+
+/* Dialog container */
+#usi-options-dialog {
+    display: none;
+    position: fixed;
+    top: 10%;
+    left: 25%;
+    width: 50%;
+    max-height: 80vh;
+    background: #eee;
+    padding: 20px;
+    border: 1px solid #444;
+    overflow-y: auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 1000;
+}
+
+/* Scrollable area inside dialog */
+.usi-options-scroll {
+    max-height: 65vh;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* Option rows */
+.usi-option-row {
+    margin-bottom: 12px;
+}
+
+.usi-option-row label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+/* Buttons */
+.usi-option-buttons {
+    margin-top: 15px;
+    text-align: right;
+}
+
+.usi-option-buttons button {
+    padding: 6px 12px;
+    margin-left: 10px;
+    font-size: 14px;
+    cursor: pointer;
+}

@@ -8,6 +8,7 @@
         #log { white-space: pre-wrap; background: #eee; padding: 10px; height: 300px; overflow-y: auto; }
         #input { width: 100%; padding: 10px; font-size: 16px; }
     </style>
+    <link rel="stylesheet" href="usi_options.css">
 </head>
 
 <body>
@@ -16,13 +17,25 @@
 <div id="log"></div>
 <input id="input" placeholder="Type USI commands here (e.g., 'usi')" />
 
+<button onclick="USIOptionsDialog.open()">Engine Options</button>
+
+<div id="usi-options-dialog"></div>
+
 <!-- Load Emscripten-generated loader -->
 
 <script src="/lib/yaneuraou.halfkp.noeval.js"></script>
 
 
 <!-- Load your browser-side engine controller -->
+<script  src="/usi_options.js"></script>
+<script src="/usi_options_dialog.js"></script>
+
 <script type="module" src="/index.js"></script>
+
+
+
+
+
 <!-- Command history logic (new external file) -->
 <script src="/command_history.js"></script>
 </body>
