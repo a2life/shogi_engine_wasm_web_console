@@ -1,17 +1,29 @@
 // usi_options.js
 // Parses USI option lines and stores defaults + overrides.
+// Now includes a queue system so overrides applied before "usiok"
+// are safely stored and applied once ready.
 
 window.USIOptions = (() => {
 
-    const options = [];          // Parsed from "option name ..." lines
-    const overrides = {};        // From setoption commands
+    const options = [];      // Parsed from "option name ..." lines
+    const overrides = {};    // Final applied overrides
+
+    // New: queue + ready flag
+    let pendingOverrides = [];
+    let ready = false;
 
     // Parse a single "option name ..." line
     function parseOptionLine(line) {
-        // Example:
-        // option name Hash type spin default 16 min 1 max 1024
         const tokens = line.split(/\s+/);
-        const obj = { name: "", type: "", default: null, min: null, max: null, values: [], value: null };
+        const obj = {
+            name: "",
+            type: "",
+            default: null,
+            min: null,
+            max: null,
+            values: [],
+            value: null
+        };
 
         let i = 1; // skip "option"
         while (i < tokens.length) {
@@ -29,7 +41,7 @@ window.USIOptions = (() => {
                     break;
                 case "default":
                     obj.default = val;
-                    obj.value = val; // initial value = default
+                    obj.value = val;
                     i += 2;
                     break;
                 case "min":
@@ -56,6 +68,37 @@ window.USIOptions = (() => {
     function feedEngineLine(line) {
         if (line.startsWith("option ")) {
             parseOptionLine(line);
+            return;
+        }
+
+        // Detect end of USI option list
+        if (line === "usiok") {
+            ready = true;
+
+            // Apply queued overrides
+            for (const { key, value } of pendingOverrides) {
+                setOverride(key, value);
+            }
+            pendingOverrides = [];
+        }
+    }
+
+    // Internal: apply override immediately
+    function setOverride(key, value) {
+        overrides[key] = value;
+
+        const opt = options.find(o => o.name === key);
+        if (opt) {
+            opt.value = value;
+        }
+    }
+
+    // Public: apply override or queue it
+    function applyOrQueueOverride(key, value) {
+        if (ready) {
+            setOverride(key, value);
+        } else {
+            pendingOverrides.push({ key, value });
         }
     }
 
@@ -67,16 +110,15 @@ window.USIOptions = (() => {
         const name = m[1];
         const value = m[2];
 
-        overrides[name] = value;
-
-        const opt = options.find(o => o.name === name);
-        if (opt) opt.value = value;
+        applyOrQueueOverride(name, value);
     }
 
     return {
         feedEngineLine,
         applySetOption,
+        applyOrQueueOverride,
         getOptions: () => options,
         getOverrides: () => overrides
     };
+
 })();
