@@ -4,30 +4,36 @@ function log(msg) {
     el.scrollTop = el.scrollHeight;
 }
 
-async function loadNNUE(Module, url) {
+// Shared helper for loading a binary file into the Module FS
+async function loadBinaryFile(Module, url) {
     const response = await fetch(url);
     const bytes = new Uint8Array(await response.arrayBuffer());
     const filename = url.split("/").pop();
-
     Module.FS.writeFile("/" + filename, bytes);
+    return filename;
+}
+
+// Load NNUE using the shared helper
+async function loadNNUE(Module, url) {
+    const filename = await loadBinaryFile(Module, url);
+
     Module.postMessage("setoption name EvalDir value .");
     Module.postMessage(`setoption name EvalFile value ${filename}`);
     Module.postMessage(`setoption name FV_SCALE value 24`);
 
-
     log("NNUE loaded: " + filename);
 }
-async function loadBook(Module, url) {
-    const response = await fetch(url);
-    const bytes = new Uint8Array(await response.arrayBuffer());
-    const filename = url.split("/").pop();
 
-    Module.FS.writeFile("/" + filename, bytes);
+// Load Book using the shared helper
+async function loadBook(Module, url) {
+    const filename = await loadBinaryFile(Module, url);
+
     Module.postMessage("setoption name BookDir value .");
     Module.postMessage(`setoption name BookFile value ${filename}`);
 
     log("Book loaded: " + filename);
 }
+
 
 
 (async () => {
