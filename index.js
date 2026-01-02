@@ -45,8 +45,14 @@ async function loadBook(Module, url) {
 
     //capture the messages from the engine to debug console and feed to log
     Module.addMessageListener((line) => {
-        log(line);
         USIOptions.feedEngineLine(line);
+        if (suppressUsiOutput) {
+            if (line === 'usiok'){
+                suppressUsiOutput = false;  //stop hiding after init.
+            }
+            return
+        };
+        log(line);
     })
 
     await loadNNUE(Module, "/eval/nn.bin");
@@ -72,4 +78,6 @@ async function loadBook(Module, url) {
 
 
     window.Yaneura = Module;
+    let suppressUsiOutput = true;
+    Module.postMessage("usi");
 })();
