@@ -7,11 +7,29 @@ Operation of this source code was confirmed with halfkp.noeval version of Yaneur
 separately prepared Suisho5 Evaluation function binary as nn.bin,  and
 yaneuraou Standard book(2017) as standard_book.db 
 
+### To run this program,
+- Clone this repo.
+- Obtain WASM version of YaneuraOu engine from ttps://github.com/mizar/YaneuraOu/releases/tag/v7.6.3.
+- Extract the halfkp.noeval files from zip. 
+- place the files in the lib folder.
+- Download Suisho5.7z from https://github.com/yaneurao/YaneuraOu/releases/tag/suisho5, extract nn.bin from it. place it in the eval folder.
+- Download book file from https://github.com/yaneurao/YaneuraOu/releases/tag/v4.73_book, extract standard_book.db from it. place it in the book folder.
+- Downloade files placement should look like this:
+<pre><code>
+/lib/yaneuraou.halfkp.noeval.js (and .br, .gz files)
+/lib/yaneuraou.halfkp.noeval.wasm (and .br ,.gz files)
+/eval/nn.bin
+/book/standard_book.db
+</code></pre>
+- Run 'npm install'
+- Run 'npx server' 
 
+
+## To obtain later versions of YaneuraOu engine,
 ### WASM executable is not included in YaneuraOu release packages.  Version 7.6.3 version is available from Mizar/Yaneuraou repo.
 https://github.com/mizar/YaneuraOu/releases/tag/v7.6.3  
 
-### In theory, you should be able to compile from the source https://github.com/yaneurao/YaneuraOu with the following setup.
+### In theory, we should be able to compile WebAssembly version of the Shogi engine from the source https://github.com/yaneurao/YaneuraOu with the following setup.
 #### Note that WASM component for Version 9.x '_usi_command' export is currently turned off and not functional,so the compilation will fail.
 
 - Clone the source 
