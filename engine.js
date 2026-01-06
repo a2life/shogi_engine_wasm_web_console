@@ -1,4 +1,6 @@
 // engine.js
+import { applyOrQueueOverride, feedEngineLine } from "./usi_options.js";
+
 export function createEngine({ onMessage }) {
     let Module = null;
     let suppressUsiOutput = true;
@@ -14,9 +16,9 @@ export function createEngine({ onMessage }) {
     async function loadNNUE(url) {
         const filename = await loadBinaryFile(url);
 
-        USIOptions.applyOrQueueOverride("EvalDir", ".");
-        USIOptions.applyOrQueueOverride("EvalFile", filename);
-        USIOptions.applyOrQueueOverride("FV_SCALE", "24");
+        applyOrQueueOverride("EvalDir", ".");
+        applyOrQueueOverride("EvalFile", filename);
+        applyOrQueueOverride("FV_SCALE", "24");
 
         Module.postMessage("setoption name EvalDir value .");
         Module.postMessage(`setoption name EvalFile value ${filename}`);
@@ -26,8 +28,8 @@ export function createEngine({ onMessage }) {
     async function loadBook(url) {
         const filename = await loadBinaryFile(url);
 
-        USIOptions.applyOrQueueOverride("BookDir", ".");
-        USIOptions.applyOrQueueOverride("BookFile", filename);
+        applyOrQueueOverride("BookDir", ".");
+        applyOrQueueOverride("BookFile", filename);
 
         Module.postMessage("setoption name BookDir value .");
         Module.postMessage(`setoption name BookFile value ${filename}`);
@@ -41,7 +43,7 @@ export function createEngine({ onMessage }) {
         });
 
         Module.addMessageListener((line) => {
-            USIOptions.feedEngineLine(line);
+            feedEngineLine(line);
 
             if (suppressUsiOutput) {
                 if (line === "usiok") suppressUsiOutput = false;

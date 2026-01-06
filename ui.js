@@ -1,5 +1,7 @@
 // ui.js
-import {initCommandHistory} from "./command_history.js";
+import { initCommandHistory } from "./command_history.js";
+import { applySetOption } from "./usi_options.js";
+
 export function createUI({ onCommand }) {
     const logEl = document.getElementById("log");
     const inputEl = document.getElementById("input");
@@ -9,6 +11,7 @@ export function createUI({ onCommand }) {
         logEl.scrollTop = logEl.scrollHeight;
     }
 
+    // Initialize command history
     initCommandHistory(inputEl);
 
     inputEl.addEventListener("keydown", (e) => {
@@ -17,7 +20,7 @@ export function createUI({ onCommand }) {
             inputEl.value = "";
 
             if (cmd.startsWith("setoption")) {
-                USIOptions.applySetOption(cmd);
+                applySetOption(cmd);
             }
 
             log("> " + cmd);

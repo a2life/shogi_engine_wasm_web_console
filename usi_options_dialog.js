@@ -1,120 +1,121 @@
 // usi_options_dialog.js
 // Builds a dynamic dialog for editing USI options.
 
-// usi_options_dialog.js
+import { getOptions, applySetOption } from "./usi_options.js";
 
-window.USIOptionsDialog = (() => {
+let onOptionChanged = null;
 
-    function createDialog() {
-        const container = document.getElementById("usi-options-dialog");
-        container.innerHTML = "";
+export function setOptionChangedCallback(callback) {
+    onOptionChanged = callback;
+}
 
-        const opts = USIOptions.getOptions();
+function createDialog() {
+    const container = document.getElementById("usi-options-dialog");
+    container.innerHTML = "";
 
-        // Scrollable content area
-        const scrollArea = document.createElement("div");
-        scrollArea.className = "usi-options-scroll";
+    const opts = getOptions();
 
-        const form = document.createElement("div");
-        form.className = "usi-options-form";
+    // Scrollable content area
+    const scrollArea = document.createElement("div");
+    scrollArea.className = "usi-options-scroll";
 
-        opts.forEach(opt => {
-            const row = document.createElement("div");
-            row.className = "usi-option-row";
+    const form = document.createElement("div");
+    form.className = "usi-options-form";
 
-            const label = document.createElement("label");
-            label.textContent = opt.name;
+    opts.forEach(opt => {
+        const row = document.createElement("div");
+        row.className = "usi-option-row";
 
-            let input;
+        const label = document.createElement("label");
+        label.textContent = opt.name;
 
-            if (opt.type === "spin") {
-                input = document.createElement("input");
-                input.type = "number";
-                input.min = opt.min;
-                input.max = opt.max;
-                input.value = opt.value;
-            } else if (opt.type === "check") {
-                input = document.createElement("input");
-                input.type = "checkbox";
-                input.checked = opt.value === "true";
-            } else if (opt.type === "combo") {
-                input = document.createElement("select");
-                opt.values.forEach(v => {
-                    const o = document.createElement("option");
-                    o.value = v;
-                    o.textContent = v;
-                    if (v === opt.value) o.selected = true;
-                    input.appendChild(o);
-                });
-            } else {
-                input = document.createElement("input");
-                input.type = "text";
-                input.value = opt.value;
+        let input;
+
+        if (opt.type === "spin") {
+            input = document.createElement("input");
+            input.type = "number";
+            input.min = opt.min;
+            input.max = opt.max;
+            input.value = opt.value;
+        } else if (opt.type === "check") {
+            input = document.createElement("input");
+            input.type = "checkbox";
+            input.checked = opt.value === "true";
+        } else if (opt.type === "combo") {
+            input = document.createElement("select");
+            opt.values.forEach(v => {
+                const o = document.createElement("option");
+                o.value = v;
+                o.textContent = v;
+                if (v === opt.value) o.selected = true;
+                input.appendChild(o);
+            });
+        } else {
+            input = document.createElement("input");
+            input.type = "text";
+            input.value = opt.value;
+        }
+
+        input.dataset.optionName = opt.name;
+
+        row.appendChild(label);
+        row.appendChild(input);
+        form.appendChild(row);
+    });
+
+    scrollArea.appendChild(form);
+    container.appendChild(scrollArea);
+
+    // Buttons
+    const btnRow = document.createElement("div");
+    btnRow.className = "usi-option-buttons";
+
+    const applyBtn = document.createElement("button");
+    applyBtn.textContent = "Apply";
+    applyBtn.onclick = () => applyChanges(form);
+
+    const cancelBtn = document.createElement("button");
+    cancelBtn.textContent = "Cancel";
+    cancelBtn.onclick = () => (container.style.display = "none");
+
+    btnRow.appendChild(applyBtn);
+    btnRow.appendChild(cancelBtn);
+    container.appendChild(btnRow);
+
+    container.style.display = "block";
+}
+
+function applyChanges(form) {
+    const inputs = form.querySelectorAll("[data-option-name]");
+    const opts = getOptions();
+
+    inputs.forEach(input => {
+        const name = input.dataset.optionName;
+        const opt = opts.find(o => o.name === name);
+        if (!opt) return;
+
+        let newValue;
+        if (input.type === "checkbox") {
+            newValue = input.checked ? "true" : "false";
+        } else {
+            newValue = input.value.trim();
+        }
+
+        // Only send if changed from current value
+        if (newValue !== opt.value) {
+            // Update USIOptions internal state
+            applySetOption(`setoption name ${name} value ${newValue}`);
+
+            // Send to engine via callback
+            if (onOptionChanged) {
+                onOptionChanged(name, newValue);
             }
+        }
+    });
 
-            input.dataset.optionName = opt.name;
+    document.getElementById("usi-options-dialog").style.display = "none";
+}
 
-            row.appendChild(label);
-            row.appendChild(input);
-            form.appendChild(row);
-        });
-
-        scrollArea.appendChild(form);
-        container.appendChild(scrollArea);
-
-        // Buttons
-        const btnRow = document.createElement("div");
-        btnRow.className = "usi-option-buttons";
-
-        const applyBtn = document.createElement("button");
-        applyBtn.textContent = "Apply";
-        applyBtn.onclick = () => applyChanges(form);
-
-        const cancelBtn = document.createElement("button");
-        cancelBtn.textContent = "Cancel";
-        cancelBtn.onclick = () => (container.style.display = "none");
-
-        btnRow.appendChild(applyBtn);
-        btnRow.appendChild(cancelBtn);
-        container.appendChild(btnRow);
-
-        container.style.display = "block";
-    }
-
-    function applyChanges(form) {
-        const inputs = form.querySelectorAll("[data-option-name]");
-        const opts = USIOptions.getOptions();
-
-        inputs.forEach(input => {
-            const name = input.dataset.optionName;
-            const opt = opts.find(o => o.name === name);
-            if (!opt) return;
-
-            let newValue;
-            if (input.type === "checkbox") {
-                newValue = input.checked ? "true" : "false";
-            } else {
-                newValue = input.value.trim();
-            }
-
-            // Only send if changed from current value
-            if (newValue !== opt.value) {
-                // Update USIOptions internal state
-                USIOptions.applySetOption(`setoption name ${name} value ${newValue}`);
-
-                // Send to engine
-                if (window.onUSIOptionChanged) {
-                    window.onUSIOptionChanged(name, newValue);
-                }
-
-            }
-        });
-
-        document.getElementById("usi-options-dialog").style.display = "none";
-    }
-
-
-    return {
-        open: createDialog
-    };
-})();
+export function open() {
+    createDialog();
+}

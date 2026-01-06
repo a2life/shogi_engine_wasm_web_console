@@ -15,7 +15,7 @@ https://github.com/mizar/YaneuraOu/releases/tag/v7.6.3
 #### Note that WASM component for Version 9.x '_usi_command' export is currently turned off and not functional,so the compilation will fail.
 
 - Clone the source 
-- Docker installed in your PC
+- Docker installed on your PC
 - just run .\script\build-wasm.cmd
 - to limit the compile target to halfkp.noeval, add 'halfkp.noeval' parameter in the last line of build-wasm.cmd. i.e.,
 <pre><code>
@@ -30,11 +30,11 @@ docker run --rm -v %CD%:/src emscripten/emsdk:3.1.43 node script/wasm_build.js h
  
 </code></pre>
 
-### The WASN package includes javascript file that you can execute with node.js 
-In another word, included top level (usi.halfkp.noeval.js/ts) js file is meant for running the code locally in your PC. 
-But why bother with this as you will get native binary for your machine anyway.
+### The generated WASM package includes javascript file that you can execute with node.js 
+In another word, included top level (usi.halfkp.noeval.js/ts) js file is meant for running the code locally on your PC. 
+But why bother with this as you will get native binary for your machine anyway, (unless your machine's architecture is not supported)
 
-The code in this repo will allow you to host this WASM files on a server so that remote browser will load them and run it inside the browser.
+The code in this repo (index.js and other js modules) will allow you to host this WASM files on a server so that remote browser will load them and run it inside the browser.
 
 Just place files as below
 

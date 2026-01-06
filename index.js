@@ -1,8 +1,10 @@
 // index.js
 import { createEngine } from "./engine.js";
 import { createUI } from "./ui.js";
+import { open as openOptionsDialog, setOptionChangedCallback } from "./usi_options_dialog.js";
 
-window.onUSIOptionChanged=(name,value)=>{engine.send(`setoption name ${name} value ${value}`);}
+// Make dialog accessible globally for the button
+window.openUSIOptionsDialog = openOptionsDialog;
 
 (async () => {
     const ui = createUI({
@@ -15,6 +17,11 @@ window.onUSIOptionChanged=(name,value)=>{engine.send(`setoption name ${name} val
         onMessage: (line) => ui.log(line),
     });
 
+    // Set up callback for when options change in dialog
+    setOptionChangedCallback((name, value) => {
+        engine.send(`setoption name ${name} value ${value}`);
+    });
+
     const Module = await engine.init();
     ui.log("Engine loaded.");
 
@@ -22,6 +29,4 @@ window.onUSIOptionChanged=(name,value)=>{engine.send(`setoption name ${name} val
     await engine.loadBook("/book/standard_book.db");
 
     ui.log("Ready.");
-
-
 })();
