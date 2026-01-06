@@ -51,7 +51,7 @@ export function createEngine({ onMessage }) {
             onMessage(line);
         });
 
-        Module.postMessage("usi");
+        Module.postMessage("usi"); //gather option name and values info
         return Module;
     }
 
