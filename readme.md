@@ -30,14 +30,14 @@ yaneuraou Standard book(2017) as standard_book.db
 https://github.com/mizar/YaneuraOu/releases/tag/v7.6.3  
 
 ### In theory, we should be able to compile WebAssembly version of the Shogi engine from the source https://github.com/yaneurao/YaneuraOu with the following setup.
-#### Note that even though WASM run command seems successful in the repo's test suites, I could not compile Version 9.x successfuly.
+#### Note that  wasm_build command fails compile in some versions. Version 9.2 compiles successfuly for halfkp.noeval version.  See the repo's test compile report. 
 
 - Clone the source 
 - Docker installed on your PC
 - just run .\script\wasm-build.cmd
 - to limit the compile target to halfkp.noeval, add 'halfkp.noeval' parameter in the last line of wasm-build.cmd. i.e.,
 <pre><code>
-docker run --rm -v %CD%:/src emscripten/emsdk:3.1.43 node script/wasm_build.js halfkpi.noeval
+docker run --rm -v %CD%:/src emscripten/emsdk:3.1.43 node script/wasm_build.js halfkp.noeval
 </code></pre>
 - This will compile the tournament version of Yaneuraou
 - If normal version is desired, search wasm_build.js  for word 'tournament' and replace it with 'normal'
