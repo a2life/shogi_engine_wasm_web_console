@@ -30,12 +30,12 @@ yaneuraou Standard book(2017) as standard_book.db
 https://github.com/mizar/YaneuraOu/releases/tag/v7.6.3  
 
 ### In theory, we should be able to compile WebAssembly version of the Shogi engine from the source https://github.com/yaneurao/YaneuraOu with the following setup.
-#### Note that WASM component for Version 9.x '_usi_command' export is currently turned off and not functional,so the compilation will fail.
+#### Note that even though WASM run command seems successful in the repo's test suites, I could not compile Version 9.x successfuly.
 
 - Clone the source 
 - Docker installed on your PC
-- just run .\script\build-wasm.cmd
-- to limit the compile target to halfkp.noeval, add 'halfkp.noeval' parameter in the last line of build-wasm.cmd. i.e.,
+- just run .\script\wasm-build.cmd
+- to limit the compile target to halfkp.noeval, add 'halfkp.noeval' parameter in the last line of wasm-build.cmd. i.e.,
 <pre><code>
 docker run --rm -v %CD%:/src emscripten/emsdk:3.1.43 node script/wasm_build.js halfkpi.noeval
 </code></pre>
